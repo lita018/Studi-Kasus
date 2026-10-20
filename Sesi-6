@@ -1,5 +1,61 @@
+# Materi 6: Deforestation Alerts and Driver Attribution with Satellite Imagery & AI (Dr. Bart Slachter)
+import torch
+import torch.nn as nn
+import torch.optim as optim
 
-🗓 Hari/Tanggal: Senin, 19 Oktober 2026
-⏰ Waktu: 14.00 WIB
-🎤 Narasumber: Bart Slaghter (Wegenigen University & Reaserch)
-📌 Materi: “Attributing direct drivers to deforestation alerts with satellite imagery and AI”
+# Studi Kasus: Klasifikasi Driver Deforestasi Berbasis CNN (Simulasi Multi-Sensor Stack)
+class DeforestationDriverCNN(nn.Module):
+    def __init__(self, num_classes=5):
+        super(DeforestationDriverCNN, self).__init__()
+        # Input: Stack 6 Channel (2 Channel Sentinel-1 SAR + 4 Channel Sentinel-2 Optical)
+        self.features = nn.Sequential(
+            nn.Conv2d(6, 16, kernel_size=3, padding=1),
+            nn.BatchNorm2d(16),
+            nn.ReLU(),
+            nn.MaxPool2d(2, 2),
+            
+            nn.Conv2d(16, 32, kernel_size=3, padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.MaxPool2d(2, 2)
+        )
+        self.classifier = nn.Sequential(
+            nn.Linear(32 * 16 * 16, 64),
+            nn.ReLU(),
+            nn.Dropout(0.3),
+            nn.Linear(64, num_classes) # 5 Kelas: Agri-Small, Agri-Large, Logging, Mining, Fire
+        )
+
+    def forward(self, x):
+        x = self.features(x)
+        x = x.view(x.size(0), -1)
+        x = self.classifier(x)
+        return x
+
+def main():
+    print("=== Klasifikasi Driver Deforestasi (Multi-Sensor Sentinel-1/2) ===")
+    
+    # 1. Inisialisasi Model
+    model = DeforestationDriverCNN(num_classes=5)
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+    # 2. Simulasi Dummy Batch Data (Batch Size=4, Channels=6, Height=64, Width=64)
+    # Channel 0-1: Radar Backscatter (Sentinel-1), Channel 2-5: Spektral Optik (Sentinel-2)
+    dummy_input = torch.randn(4, 6, 64, 64)
+    dummy_labels = torch.tensor([0, 2, 1, 4]) # Label: 0=Small Agri, 2=Logging, 1=Large Agri, 4=Fire
+
+    # 3. Process Forward Pass
+    outputs = model(dummy_input)
+    loss = criterion(outputs, dummy_labels)
+
+    # 4. Process Backward Pass & Optimization
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+
+    print(f"Loss Training Iterasi Awal: {loss.item():.4f}")
+    print("Prediksi berhasil dijalankan pada struktur tumpukan citra multi-sensor.")
+
+if __name__ == '__main__':
+    main()
