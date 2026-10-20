@@ -1,0 +1,4 @@
+tamper_type,jumlah,terdeteksi,recall
+copy_move,12,10,0.833
+splice,12,12,1.0
+text_edit,21,21,1.0

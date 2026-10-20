@@ -1,0 +1,13 @@
+,asli,dimanipulasi,rasio
+ela_mean,2.283,2.397,1.05
+ela_std,2.383,2.636,1.106
+ela_p99,11.52,12.652,1.098
+ela_blk_std,1.441,1.655,1.148
+ela_blk_range,5.427,6.602,1.217
+ela_blk_max_over_median,4.07,4.368,1.073
+noise_mean,2.502,2.624,1.049
+noise_blk_std,3.653,3.794,1.039
+noise_blk_cv,1.523,1.482,0.974
+noise_min_over_median,0.344,0.279,0.811
+noise_max_over_median,26.281,22.25,0.847
+copy_move_pairs,0.423,0.705,1.666

@@ -1,0 +1,5 @@
+,biaya_total
+tanpa review (loloskan semua),450.0
+review manual semua gambar,300.0
+model random_forest @0.5,355.0
+model random_forest @0.12,182.0
