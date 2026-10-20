@@ -1,4 +1,38 @@
-🗓 Hari/Tanggal: Senin, 19 Oktober 2026
-⏰ Waktu: 09.00 WIB
-🎤 Narasumber: Arafat Febriandirza (Badan Riset dan Inovasi Nasional)
-📌 Materi: “Human-Computer Interaction & Data Visualization”
+#RESUME WEBINAR 5: Human-Computer Interaction & Data Visualization
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+
+# Studi Kasus: Visualisasi Data dengan Prinsip HCI & Shneiderman's Mantra
+def main():
+    st.set_page_config(page_title="Dashboard Interaktif", layout="wide")
+    st.title("📊 Dashboard Analitik Interaktif")
+    st.markdown("Implementasi: *Overview First, Zoom and Filter, Details-on-Demand*")
+
+    
+    data = {
+        'Kategori': ['Dokumen A', 'Dokumen B', 'Dokumen C', 'Dokumen A', 'Dokumen B'],
+        'Bulan': ['Januari', 'Januari', 'Februari', 'Februari', 'Maret'],
+        'Jumlah': [120, 80, 200, 150, 90]
+    }
+    df = pd.DataFrame(data)
+
+    st.subheader("1. Overview (Gambaran Keseluruhan)")
+    total_dokumen = df['Jumlah'].sum()
+    st.metric(label="Total Dokumen Terproses", value=f"{total_dokumen} Berkas")
+
+    st.subheader("2. Zoom & Filter (Eksplorasi Spesifik)")
+    pilihan_kategori = st.selectbox("Filter berdasarkan Kategori:", df['Kategori'].unique())
+    
+
+    df_filtered = df[df['Kategori'] == pilihan_kategori]
+    fig = px.bar(df_filtered, x='Bulan', y='Jumlah', title=f"Tren Bulanan: {pilihan_kategori}", text_auto=True)
+    fig.update_layout(plot_bgcolor="white") # Desain bersih
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.subheader("3. Details on Demand")
+    with st.expander("Klik untuk melihat data tabular (Raw Data)"):
+        st.dataframe(df_filtered)
+
+if __name__ == '__main__':
+    main()
